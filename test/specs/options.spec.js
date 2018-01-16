@@ -1,3 +1,5 @@
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 describe('options', function () {
   beforeEach(function () {
     jasmine.Ajax.install();
@@ -24,7 +26,7 @@ describe('options', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['X-Requested-With']).toEqual('XMLHttpRequest');
+      testHeaderValue(request.requestHeaders, 'X-Requested-With', 'XMLHttpRequest');
       done();
     });
   });
@@ -51,7 +53,7 @@ describe('options', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['Accept']).toEqual('foo/bar');
+      testHeaderValue(request.requestHeaders, 'Accept', 'foo/bar');
       done();
     });
   });

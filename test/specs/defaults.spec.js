@@ -1,5 +1,7 @@
 var defaults = require('../../lib/defaults');
 var utils = require('../../lib/utils');
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 
 describe('defaults', function () {
   var XSRF_COOKIE_NAME = 'CUSTOM-XSRF-TOKEN';
@@ -76,7 +78,7 @@ describe('defaults', function () {
     instance.get('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[instance.defaults.xsrfHeaderName]).toEqual('foobarbaz');
+      testHeaderValue(request.requestHeaders, instance.defaults.xsrfHeaderName, 'foobarbaz');
       done();
     });
   });
@@ -86,7 +88,7 @@ describe('defaults', function () {
     axios.get('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['X-CUSTOM-HEADER']).toBe('foo');
+      testHeaderValue(request.requestHeaders, 'X-CUSTOM-HEADER', 'foo');
       done();
     });
   });
@@ -96,7 +98,7 @@ describe('defaults', function () {
     axios.post('/foo', {});
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['X-CUSTOM-HEADER']).toBe('foo');
+      testHeaderValue(request.requestHeaders, 'X-CUSTOM-HEADER', 'foo');
       done();
     });
   });
@@ -124,14 +126,17 @@ describe('defaults', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders).toEqual(
-        utils.merge(defaults.headers.common, defaults.headers.get, {
-          'X-COMMON-HEADER': 'commonHeaderValue',
-          'X-GET-HEADER': 'getHeaderValue',
-          'X-FOO-HEADER': 'fooHeaderValue',
-          'X-BAR-HEADER': 'barHeaderValue'
-        })
-      );
+      var expextedHeaders = utils.merge(defaults.headers.common, defaults.headers.get, {
+        'X-COMMON-HEADER': 'commonHeaderValue',
+        'X-GET-HEADER': 'getHeaderValue',
+        'X-FOO-HEADER': 'fooHeaderValue',
+        'X-BAR-HEADER': 'barHeaderValue'
+      })
+;
+      expect(Object.keys(request.requestHeaders).length).toEqual(Object.keys(expextedHeaders).length);
+      object.keys(expextedHeaders).forEach(function (key){
+        testHeaderValue(request.requestHeaders, key, expextedHeaders[key]);
+      });
       done();
     });
   });

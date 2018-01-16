@@ -1,3 +1,5 @@
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 var cookies = require('../../lib/helpers/cookies');
 
 describe('xsrf', function () {
@@ -14,7 +16,7 @@ describe('xsrf', function () {
     axios('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[axios.defaults.xsrfHeaderName]).toEqual(undefined);
+      testHeaderValue(request.requestHeaders, axios.defaults.xsrfHeaderName, undefined);
       done();
     });
   });
@@ -25,7 +27,7 @@ describe('xsrf', function () {
     axios('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[axios.defaults.xsrfHeaderName]).toEqual('12345');
+      testHeaderValue(request.requestHeaders, axios.defaults.xsrfHeaderName, '12345');
       done();
     });
   });
@@ -38,7 +40,7 @@ describe('xsrf', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[axios.defaults.xsrfHeaderName]).toEqual(undefined);
+      testHeaderValue(request.requestHeaders, axios.defaults.xsrfHeaderName, undefined);
       done();
     });
   });
@@ -62,7 +64,7 @@ describe('xsrf', function () {
     axios('http://example.com/');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[axios.defaults.xsrfHeaderName]).toEqual(undefined);
+      testHeaderValue(request.requestHeaders, axios.defaults.xsrfHeaderName, undefined);
       done();
     });
   });
@@ -75,7 +77,7 @@ describe('xsrf', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders[axios.defaults.xsrfHeaderName]).toEqual('12345');
+      testHeaderValue(request.requestHeaders, axios.defaults.xsrfHeaderName, '12345');
       done();
     });
   });

@@ -1,3 +1,5 @@
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 describe('transform', function () {
   beforeEach(function () {
     jasmine.Ajax.install();
@@ -87,7 +89,7 @@ describe('transform', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['X-Authorization']).toEqual(token);
+      testHeaderValue(request.requestHeaders, 'X-Authorization', token);
       done();
     });
   });

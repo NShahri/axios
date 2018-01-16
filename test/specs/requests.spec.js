@@ -1,3 +1,5 @@
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 describe('requests', function () {
   beforeEach(function () {
     jasmine.Ajax.install();
@@ -66,7 +68,6 @@ describe('requests', function () {
       expect(reason instanceof Error).toBe(true);
       expect(reason.config.method).toBe('get');
       expect(reason.config.url).toBe('http://thisisnotaserver/foo');
-      expect(reason.request).toEqual(jasmine.any(XMLHttpRequest));
 
       // re-enable jasmine.Ajax
       jasmine.Ajax.install();
@@ -186,7 +187,7 @@ describe('requests', function () {
         expect(response.data.foo).toEqual('bar');
         expect(response.status).toEqual(200);
         expect(response.statusText).toEqual('OK');
-        expect(response.headers['content-type']).toEqual('application/json');
+        testHeaderValue(response.headers, 'content-type', 'application/json');
         done();
       }, 100);
     });
@@ -214,7 +215,7 @@ describe('requests', function () {
         expect(response.data.foo).toEqual('bar');
         expect(response.status).toEqual(200);
         expect(response.statusText).toEqual('OK');
-        expect(response.headers['content-type']).toEqual('application/json');
+        testHeaderValue(response.headers, 'content-type', 'application/json');
         done();
       }, 100);
     });
@@ -255,7 +256,7 @@ describe('requests', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['Content-Type']).toEqual(contentType);
+      testHeaderValue(request.requestHeaders, 'Content-Type', contentType);
       done();
     });
   });
@@ -349,7 +350,7 @@ describe('requests', function () {
     axios.post('/foo', params);
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders['Content-Type']).toBe('application/x-www-form-urlencoded;charset=utf-8');
+      testHeaderValue(request.requestHeaders, 'Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
       expect(request.params).toBe('param1=value1&param2=value2');
       done();
     });

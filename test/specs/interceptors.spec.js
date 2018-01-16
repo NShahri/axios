@@ -1,3 +1,5 @@
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 describe('interceptors', function () {
   beforeEach(function () {
     jasmine.Ajax.install();
@@ -23,7 +25,7 @@ describe('interceptors', function () {
         responseText: 'OK'
       });
 
-      expect(request.requestHeaders.test).toBe('added by interceptor');
+      testHeaderValue(request.requestHeaders, 'test', 'added by interceptor');
       done();
     });
   });
@@ -59,7 +61,7 @@ describe('interceptors', function () {
     axios('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders.async).toBe('promise');
+      testHeaderValue(request.requestHeaders, 'async', 'promise');
       done();
     });
   });
@@ -81,9 +83,9 @@ describe('interceptors', function () {
     axios('/foo');
 
     getAjaxRequest().then(function (request) {
-      expect(request.requestHeaders.test1).toBe('1');
-      expect(request.requestHeaders.test2).toBe('2');
-      expect(request.requestHeaders.test3).toBe('3');
+      testHeaderValue(request.requestHeaders, 'test1', '1');
+      testHeaderValue(request.requestHeaders, 'test2', '2');
+      testHeaderValue(request.requestHeaders, 'test3', '3');
       done();
     });
   });

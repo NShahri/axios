@@ -1,22 +1,4 @@
-function testHeaderValue(headers, key, val) {
-  var found = false;
-
-  for (var k in headers) {
-    if (k.toLowerCase() === key.toLowerCase()) {
-      found = true;
-      expect(headers[k]).toEqual(val);
-      break;
-    }
-  }
-
-  if (!found) {
-    if (typeof val === 'undefined') {
-      expect(headers.hasOwnProperty(key)).toEqual(false);
-    } else {
-      throw new Error(key + ' was not found in headers');
-    }
-  }
-}
+var testHeaderValue = require('../testHelpers').testHeaderValue;
 
 describe('headers', function () {
   beforeEach(function () {
@@ -35,7 +17,7 @@ describe('headers', function () {
     getAjaxRequest().then(function (request) {
       for (var key in headers) {
         if (headers.hasOwnProperty(key)) {
-          expect(request.requestHeaders[key]).toEqual(headers[key]);
+          testHeaderValue(request.requestHeaders, key, headers[key]);
         }
       }
       done();
@@ -50,7 +32,7 @@ describe('headers', function () {
     getAjaxRequest().then(function (request) {
       for (var key in headers) {
         if (headers.hasOwnProperty(key)) {
-          expect(request.requestHeaders[key]).toEqual(headers[key]);
+          testHeaderValue(request.requestHeaders, key, headers[key]);
         }
       }
       done();
