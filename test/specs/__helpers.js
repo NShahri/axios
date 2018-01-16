@@ -1,3 +1,8 @@
+window.fetch = undefined;
+require('whatwg-fetch');
+
+var testHeaderValue = require('../testHelpers').testHeaderValue;
+
 // Polyfill ES6 Promise
 require('es6-promise').polyfill();
 
@@ -74,7 +79,7 @@ setupBasicAuthTest = function setupBasicAuthTest() {
     setTimeout(function () {
       var request = jasmine.Ajax.requests.mostRecent();
 
-      expect(request.requestHeaders['Authorization']).toEqual('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
+      testHeaderValue(request.requestHeaders, 'Authorization', 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
       done();
     }, 100);
   });
