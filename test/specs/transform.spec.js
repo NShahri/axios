@@ -1,3 +1,5 @@
+/* global expect, it, describe, afterEach, beforeEach, getAjaxRequest, axios */
+
 var testHeaderValue = require('../testHelpers').testHeaderValue;
 
 describe('transform', function () {
@@ -50,12 +52,18 @@ describe('transform', function () {
 
     axios.post('/foo', data, {
       transformRequest: function (data) {
-        return data;
+        //
+        // Based on documentation, the last function in the array must return
+        // a string or an instance of Buffer, ArrayBuffer, FormData or Stream
+        // https://github.com/axios/axios#request-config
+        //
+        return JSON.stringify(data);
       }
     });
 
     getAjaxRequest().then(function (request) {
-      expect(typeof request.params).toEqual('object');
+      expect(typeof request.params).toEqual('string');
+      expect(request.params).toEqual('{"foo":"bar"}');
       done();
     });
   });
