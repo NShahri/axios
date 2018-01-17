@@ -1,3 +1,5 @@
+/* global expect, it, describe, afterEach, beforeEach, getAjaxRequest, axios */
+
 var Cancel = axios.Cancel;
 var CancelToken = axios.CancelToken;
 
@@ -46,6 +48,15 @@ describe('cancel', function() {
     });
 
     it('calls abort on request object', function (done) {
+      if (fetch) {
+        //
+        // This test only works on xhr adapter
+        // As fetch polyfill can not set statusText of xhr request to 'abort'
+        //
+        done();
+        return;
+      }
+
       var source = CancelToken.source();
       var request;
       axios.get('/foo/bar', {

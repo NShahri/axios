@@ -1,5 +1,6 @@
 window.fetch = undefined;
 require('whatwg-fetch');
+require('abortcontroller-polyfill');
 
 var testHeaderValue = require('../testHelpers').testHeaderValue;
 
