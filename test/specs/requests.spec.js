@@ -223,6 +223,14 @@ describe('requests', function () {
 
   // https://github.com/axios/axios/issues/201
   it('should fix IE no content error', function (done) {
+    //
+    // TODO: IE 9 does not support fetch so this test is not valid when using fetch except xhr
+    //
+    if (!isOldIE) {
+      done();
+      return;
+    }
+
     var response;
 
     axios('/foo').then(function (res) {
@@ -236,13 +244,8 @@ describe('requests', function () {
       });
 
       setTimeout(function () {
-        //
-        // TODO: IE 9 does not support fetch so this test is not valid when using fetch except xhr
-        //
-        if (!window || !window.fetch) {
-          expect(response.status).toEqual(204);
-          expect(response.statusText).toEqual('No Content');
-        }
+        expect(response.status).toEqual(204);
+        expect(response.statusText).toEqual('No Content');
         done();
       }, 100);
     });

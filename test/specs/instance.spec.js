@@ -49,18 +49,21 @@ describe('instance', function () {
   });
 
   it('should use instance options', function (done) {
+    //
+    // TODO: as fetch can not implement timeout the same as xhr, using timeout as instance option is not right for testing
+    // TODO: use another config
+    //
+    if (fetch) {
+      done();
+      return;
+    }
+
     var instance = axios.create({ timeout: 1000 });
 
     instance.get('/foo');
 
     getAjaxRequest().then(function (request) {
-      //
-      // TODO: as fetch can not implement timeout the same as xhr, using timeout as instance option is not right for testing
-      // TODO: use another config
-      //
-      if (!window || !window.fetch) {
-        expect(request.timeout).toBe(1000);
-      }
+      expect(request.timeout).toBe(1000);
       done();
     });
   });
