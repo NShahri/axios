@@ -1,3 +1,5 @@
+/* global expect, it, describe, afterEach, beforeEach, getAjaxRequest, axios */
+
 var defaults = require('../../lib/defaults');
 var utils = require('../../lib/utils');
 var testHeaderValue = require('../testHelpers').testHeaderValue;
@@ -125,18 +127,20 @@ describe('defaults', function () {
       }
     });
 
+    var expectedHeaders = utils.merge(defaults.headers.common, defaults.headers.get, {
+      'X-COMMON-HEADER': 'commonHeaderValue',
+      'X-GET-HEADER': 'getHeaderValue',
+      'X-FOO-HEADER': 'fooHeaderValue',
+      'X-BAR-HEADER': 'barHeaderValue'
+    });
+
     getAjaxRequest().then(function (request) {
-      var expextedHeaders = utils.merge(defaults.headers.common, defaults.headers.get, {
-        'X-COMMON-HEADER': 'commonHeaderValue',
-        'X-GET-HEADER': 'getHeaderValue',
-        'X-FOO-HEADER': 'fooHeaderValue',
-        'X-BAR-HEADER': 'barHeaderValue'
-      })
-;
       expect(Object.keys(request.requestHeaders).length).toEqual(Object.keys(expextedHeaders).length);
-      object.keys(expextedHeaders).forEach(function (key){
-        testHeaderValue(request.requestHeaders, key, expextedHeaders[key]);
+
+      utils.forEach(expectedHeaders, function (val, key) {
+        testHeaderValue(request.requestHeaders, key, val);
       });
+
       done();
     });
   });
