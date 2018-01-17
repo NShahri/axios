@@ -55,11 +55,10 @@ describe('instance', function () {
 
     getAjaxRequest().then(function (request) {
       //
-      // TODO: as fetch can not implmenet timeout the same as xhr, using timeout as instance option is not right for testing
+      // TODO: as fetch can not implement timeout the same as xhr, using timeout as instance option is not right for testing
       // TODO: use another config
       //
       if (!window || !window.fetch) {
-        console.log(request, request.timeout);
         expect(request.timeout).toBe(1000);
       }
       done();
