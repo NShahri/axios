@@ -71,11 +71,18 @@ describe('cancel', function() {
       axios.get('/foo', {
         cancelToken: source.token
       }).then(function () {
-        window.addEventListener('unhandledrejection', function () {
+        function eventHandler () {
           done.fail('Unhandled rejection.');
-        });
+        }
+
+        window.addEventListener('unhandledrejection', eventHandler);
+
         source.cancel();
-        setTimeout(done, 100);
+
+        setTimeout(function() {
+          window.removeEventListener('unhandledrejection', eventHandler);
+          done();
+        }, 100);
       });
 
       getAjaxRequest().then(function (request) {
