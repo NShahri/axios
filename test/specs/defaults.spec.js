@@ -135,7 +135,7 @@ describe('defaults', function () {
     });
 
     getAjaxRequest().then(function (request) {
-      expect(Object.keys(request.requestHeaders).length).toEqual(Object.keys(expextedHeaders).length);
+      expect(Object.keys(request.requestHeaders).length).toEqual(Object.keys(expectedHeaders).length);
 
       utils.forEach(expectedHeaders, function (val, key) {
         testHeaderValue(request.requestHeaders, key, val);
