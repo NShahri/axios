@@ -1,4 +1,3 @@
-/* axios v0.17.1 | (c) 2017 by Matt Zabriskie */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -448,7 +447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*!
 	 * Determine if an object is a Buffer
 	 *
-	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+	 * @author   Feross Aboukhadijeh <https://feross.org>
 	 * @license  MIT
 	 */
 	
@@ -985,9 +984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (utils.isArray(val)) {
 	        key = key + '[]';
-	      }
-	
-	      if (!utils.isArray(val)) {
+	      } else {
 	        val = [val];
 	      }
 	
