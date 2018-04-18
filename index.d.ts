@@ -22,7 +22,7 @@ export interface AxiosProxyConfig {
 
 export interface AxiosRequestConfig {
   url?: string;
-  method?: string;
+  method?: 'get' | 'delete' | 'head' | 'options' | 'post' | 'put' | 'patch';
   baseURL?: string;
   transformRequest?: AxiosTransformer | AxiosTransformer[];
   transformResponse?: AxiosTransformer | AxiosTransformer[];
@@ -34,7 +34,7 @@ export interface AxiosRequestConfig {
   withCredentials?: boolean;
   adapter?: AxiosAdapter;
   auth?: AxiosBasicCredentials;
-  responseType?: string;
+  responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
   xsrfCookieName?: string;
   xsrfHeaderName?: string;
   onUploadProgress?: (progressEvent: any) => void;
@@ -42,6 +42,7 @@ export interface AxiosRequestConfig {
   maxContentLength?: number;
   validateStatus?: (status: number) => boolean;
   maxRedirects?: number;
+  socketPath?: string | null;
   httpAgent?: any;
   httpsAgent?: any;
   proxy?: AxiosProxyConfig | false;
@@ -110,8 +111,8 @@ export interface AxiosInstance {
   };
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>;
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
-  delete(url: string, config?: AxiosRequestConfig): AxiosPromise;
-  head(url: string, config?: AxiosRequestConfig): AxiosPromise;
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;

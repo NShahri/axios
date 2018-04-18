@@ -1,5 +1,6 @@
 var axios = require('../../../index');
 var http = require('http');
+var net = require('net');
 var url = require('url');
 var zlib = require('zlib');
 var fs = require('fs');
@@ -228,6 +229,28 @@ module.exports = {
     });
   },
 
+  testSocket: function (test) {
+    server = net.createServer(function (socket) {
+      socket.on('data', function() {
+        socket.end('HTTP/1.1 200 OK\r\n\r\n');
+      });
+    }).listen('./test.sock', function() {
+      axios({
+        socketPath: './test.sock',
+        url: '/'
+      })
+      .then(function(resp) {
+        test.equal(resp.status, 200);
+        test.equal(resp.statusText, 'OK');
+        test.done();
+      })
+      .catch(function (error) {
+        test.ifError(error);
+        test.done();
+      });
+    });
+  },
+
   testStream: function(test) {
     server = http.createServer(function (req, res) {
       req.pipe(res);
@@ -245,6 +268,21 @@ module.exports = {
           test.equal(string, fs.readFileSync(__filename, 'utf8'));
           test.done();
         });
+      });
+    });
+  },
+
+  testFailedStream: function(test) {
+    server = http.createServer(function (req, res) {
+      req.pipe(res);
+    }).listen(4444, function () {
+      axios.post('http://localhost:4444/',
+        fs.createReadStream('/does/not/exist')
+      ).then(function (res) {
+        test.fail();
+      }).catch(function (err) {
+        test.equal(err.message, 'ENOENT: no such file or directory, open \'/does/not/exist\'');
+        test.done();
       });
     });
   },
